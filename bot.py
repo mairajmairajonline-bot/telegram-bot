@@ -15,14 +15,12 @@ CHANNEL_LINK = "https://t.me/Amuzesh_cafetradeTvaf/84"
 
 sessions = {
     "intro": {"title": "معرفی دوره", "file_id": "BAACAgUAAxkBAAMUacguqjJioLir0_Slh2oxXeX7RtwAAikdAAK-qZhV4-NL-2f6R0Y6BA"},
-
     "beg1_1_1": {"title": "جلسه اول: تعریف ساده بازارهای مالی", "file_id": "BAACAgUAAxkBAAMVacguqsUgRSWfxHTBOKw25G7WGcUAAjgdAAK-qZhVBq6dWRpZJN46BA"},
     "beg1_1_2": {"title": "جلسه دوم: ماهیت بازارهای مالی", "file_id": "BAACAgUAAxkBAAMWacguqomeue1TnljEAAE32XUDcG-kAAJHHQACvqmYVZRdzsn-twr6OgQ"},
     "beg1_1_3": {"title": "جلسه سوم: تریدر کیست", "file_id": "BAACAgUAAxkBAAMXacguqjFHva0sNJqMQU823xJWsiAAAlEdAAK-qZhVfgocOT6_1gk6BA"},
     "beg1_1_4": {"title": "جلسه چهارم: انواع سبک‌های ترید", "file_id": "BAACAgUAAxkBAAMYacguqgFRh3FlotgC-HMkPimgGlwAAg8dAAIpZ7BVHnpO0EQ-0Jc6BA"},
     "beg1_1_5": {"title": "جلسه پنجم: نکات کلیدی برای شروع ترید", "file_id": "BAACAgUAAxkBAAMZacguqkRSe_qBmbMqVYFmLcwGHZ4AAkAeAAIaGrBVrvNEiiRia-A6BA"},
     "beg1_1_6": {"title": "جلسه ششم: خلاصه و جمع‌بندی", "file_id": "BAACAgUAAxkBAAMaacguqsV443jxKgTT3roWGBBeh8wAAlseAAIaGrBV6SJRv8Q1eDw6BA"},
-
     "beg1_2_1": {"title": "جلسه اول: آشنایی با تحلیل بازار", "file_id": "BAACAgUAAxkBAAMbacguqsR5nOj-1SOzWPiKE80uTLYAAjIcAAIRfclVy88EIhjFgDE6BA"},
     "beg1_2_2": {"title": "جلسه دوم: معرفی سبک‌های تحلیلی", "file_id": "BAACAgUAAxkBAAMcacguqtb1mWlIQ5Sy-wa6rjul5K8AAqgcAAIRfclVPSaCZvCnKcE6BA"},
     "beg1_2_3": {"title": "جلسه سوم: اندیکاتورها و سیگنال‌ها", "file_id": "BAACAgUAAxkBAAMdacguqirEzGS62fnm7gssiHiQmP8AAn0hAALnm8hVCrd2Yn5-rdU6BA"},
@@ -47,20 +45,12 @@ def main_menu_markup():
         [InlineKeyboardButton("فصل اول: ابتدایی", callback_data="f1")],
         [InlineKeyboardButton("فصل دوم: پیشرفته", callback_data="f2")],
         [InlineKeyboardButton("فصل سوم: پروژه عملی", callback_data="f3")],
+        [InlineKeyboardButton("📋 جزئیات بیشتر", url=CHANNEL_LINK)]
     ])
 
 
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await update.message.reply_text(MAIN_MENU_TEXT, reply_markup=main_menu_markup())
-
-
-async def get_file_id(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    if update.message and update.message.video:
-        file_id = update.message.video.file_id
-        await update.message.reply_text(f"File ID این ویدیو:\n<code>{file_id}</code>", parse_mode="HTML")
-    elif update.message and update.message.document:
-        file_id = update.message.document.file_id
-        await update.message.reply_text(f"File ID این فایل:\n<code>{file_id}</code>", parse_mode="HTML")
 
 
 async def button_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
@@ -123,7 +113,6 @@ if __name__ == "__main__":
     app = ApplicationBuilder().token(TOKEN).build()
     app.add_handler(CommandHandler("start", start))
     app.add_handler(CallbackQueryHandler(button_handler))
-    app.add_handler(MessageHandler(filters.VIDEO | filters.Document.ALL, get_file_id))
     app.add_error_handler(error_handler)
     logger.info("Bot is running...")
     print("Bot is running...")
