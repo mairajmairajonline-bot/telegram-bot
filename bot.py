@@ -11,7 +11,6 @@ logging.basicConfig(
 logger = logging.getLogger(__name__)
 
 TOKEN = os.environ.get("TELEGRAM_BOT_TOKEN")
-CHANNEL_LINK = "https://t.me/Amuzesh_cafetradeTvaf/84"
 
 sessions = {
     "intro": {"title": "معرفی دوره", "file_id": "BAACAgUAAxkBAAMUacguqjJioLir0_Slh2oxXeX7RtwAAikdAAK-qZhV4-NL-2f6R0Y6BA",
@@ -31,7 +30,7 @@ menu_structure = {
     "فصل سوم: پروژه عملی": {}
 }
 
-MAIN_MENU_TEXT = "سیستم آموزشی بازارهای مالی صفر تا صد\nلطفاً انتخاب کنید:"
+MAIN_MENU_TEXT = "سیستم آموزشی بازارهای مالی\nانتخاب کنید:"
 
 user_state = {}
 
@@ -63,7 +62,9 @@ def get_menu(chat_id):
         sections = list(menu_structure[f_key].keys())
 
         if not sections:
-            return f"{f_key}\n⚠️ آماده نیست", InlineKeyboardMarkup([[InlineKeyboardButton("بازگشت", callback_data="main")]])
+            return f"{f_key}\n⚠️ هنوز آماده نیست", InlineKeyboardMarkup([
+                [InlineKeyboardButton("بازگشت", callback_data="main")]
+            ])
 
         items = [{"title": s, "callback": f"section_{f_key}_{i}"} for i,s in enumerate(sections)]
         return f"{f_key}", build_buttons(items, chat_id, "main")
@@ -80,11 +81,28 @@ def get_menu(chat_id):
 
     return main_menu(chat_id)
 
+async def send_menu(context, chat_id):
+    text, markup = get_menu(chat_id)
+
+    old_msg_id = user_state[chat_id].get("menu_msg_id")
+    if old_msg_id:
+        try:
+            await context.bot.delete_message(chat_id=chat_id, message_id=old_msg_id)
+        except:
+            pass
+
+    msg = await context.bot.send_message(
+        chat_id=chat_id,
+        text=text,
+        reply_markup=markup
+    )
+
+    user_state[chat_id]["menu_msg_id"] = msg.message_id
+
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     chat_id = update.message.chat_id
-    user_state[chat_id] = {"last_session": None, "menu": "main"}
-    text, markup = main_menu(chat_id)
-    await update.message.reply_text(text, reply_markup=markup)
+    user_state[chat_id] = {"last_session": None, "menu": "main", "menu_msg_id": None}
+    await send_menu(context, chat_id)
 
 async def button_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
     query = update.callback_query
@@ -93,46 +111,40 @@ async def button_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
     chat_id = query.message.chat_id
 
     if chat_id not in user_state:
-        user_state[chat_id] = {"last_session": None, "menu": "main"}
+        user_state[chat_id] = {"last_session": None, "menu": "main", "menu_msg_id": None}
 
     if data == "main":
         user_state[chat_id]["menu"] = "main"
-        text, markup = main_menu(chat_id)
-        await query.message.edit_text(text, reply_markup=markup)
+        await send_menu(context, chat_id)
         return
 
     if data.startswith("f"):
         user_state[chat_id]["menu"] = data
-        text, markup = get_menu(chat_id)
-        await query.message.edit_text(text, reply_markup=markup)
+        await send_menu(context, chat_id)
         return
 
     if data.startswith("section_"):
         user_state[chat_id]["menu"] = data
-        text, markup = get_menu(chat_id)
-        await query.message.edit_text(text, reply_markup=markup)
+        await send_menu(context, chat_id)
         return
 
     if data == "intro":
         user_state[chat_id]["last_session"] = "intro"
         await context.bot.send_video(chat_id=chat_id, video=sessions["intro"]["file_id"], caption=sessions["intro"]["caption"])
-        text, markup = get_menu(chat_id)
-        await context.bot.send_message(chat_id=chat_id, text=text, reply_markup=markup)
+        await send_menu(context, chat_id)
         return
 
     if data == "last":
         last = user_state[chat_id].get("last_session")
         if last:
             await context.bot.send_video(chat_id=chat_id, video=sessions[last]["file_id"], caption=sessions[last]["caption"])
-            text, markup = get_menu(chat_id)
-            await context.bot.send_message(chat_id=chat_id, text=text, reply_markup=markup)
+            await send_menu(context, chat_id)
         return
 
     if data in sessions:
         user_state[chat_id]["last_session"] = data
         await context.bot.send_video(chat_id=chat_id, video=sessions[data]["file_id"], caption=sessions[data]["caption"])
-        text, markup = get_menu(chat_id)
-        await context.bot.send_message(chat_id=chat_id, text=text, reply_markup=markup)
+        await send_menu(context, chat_id)
         return
 
 async def error_handler(update: object, context: ContextTypes.DEFAULT_TYPE):
