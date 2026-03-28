@@ -7,7 +7,7 @@ TOKEN = os.environ.get("TELEGRAM_BOT_TOKEN")
 # --- دیتای جلسات ---
 sessions = {
     "beg1_1_1": {"title": "جلسه اول: تعریف ساده بازارهای مالی", "file_id": "BAACAgUAAxkBAAPuacfeJowlwTSrzSQcSH4cp03A04EAAjgdAAK-qZhV9_r4GY2NUH86BA", "caption": "✅ در این جلسه با مفاهیم ابتدایی بازارهای مالی آشنا می‌شوید."},
-    "beg1_1_2": {"title": "جلسه دوم: ماهیت بازارهای مالی", "file_id": "BAACAgUAAxkBAAPvacfeJvopCeHdNwi6RB1HMcWKNUAAAkcdAAK-qZhVHBJzxt259_M6BA", "caption": "✅ در این جلسه ماهیت و انواع بازارهای مالی بررسی می‌شود."},
+    "beg1_1_2": {"title": "جلسه دوم: ماهیت بازارهای مالی", "file_id": "BAACAgUAAxkBAAPvacfeJvopCeHdNwi6RB1HMcWKNUAAAkcdAAK-qZhVHBJzxt259_M6BA", "caption": "✅ در این جلسه ماهیت بازارهای مالی بررسی می‌شود."},
 
     "beg1_2_1": {"title": "جلسه اول: آشنایی با تحلیل بازار", "file_id": "BAACAgUAAxkBAAP0acfeJj-oHQXiQEnPbmY0AsHlUWgAAjIcAAIRfclVl_8FBMCEOEw6BA", "caption": "✅ در این جلسه با مفهوم تحلیل بازار آشنا می‌شوید."},
 
@@ -17,14 +17,14 @@ sessions = {
 # --- استارت ---
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     buttons = [
-        [InlineKeyboardButton("📘 فصل اول: سطح ابتدایی", callback_data="menu_beginner")],
-        [InlineKeyboardButton("📗 فصل دوم: سطح پیشرفته", callback_data="menu_advanced")],
-        [InlineKeyboardButton("🏁 فصل سوم: پروژه عملی", callback_data="menu_project")],
-        [InlineKeyboardButton("📋 جزئیات بیشتر", callback_data="details_more")]
+        [InlineKeyboardButton("فصل اول: سطح ابتدایی", callback_data="menu_beginner")],
+        [InlineKeyboardButton("فصل دوم: سطح پیشرفته", callback_data="menu_advanced")],
+        [InlineKeyboardButton("فصل سوم: پروژه عملی", callback_data="menu_project")],
+        [InlineKeyboardButton("جزئیات بیشتر", url="https://t.me/Amuzesh_cafetradeTvaf/84")]
     ]
 
     await update.message.reply_text(
-        "📚 سیستم آموزش بازارهای مالی فعال شد\n\nلطفاً یکی از فصل‌ها را انتخاب نمایید:",
+        "سیستم آموزش بازارهای مالی فعال شد\n\nلطفاً یکی از فصل‌ها را انتخاب نمایید:",
         reply_markup=InlineKeyboardMarkup(buttons)
     )
 
@@ -42,14 +42,15 @@ async def button_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
     # فصل اول
     if data == "menu_beginner":
         buttons = [
-            [InlineKeyboardButton("📊 بخش اول: بازارهای مالی", callback_data="menu_beg1_1")],
-            [InlineKeyboardButton("📊 بخش دوم: تحلیل بازار", callback_data="menu_beg1_2")],
-            [InlineKeyboardButton("📊 بخش سوم: ابزارهای کاربردی", callback_data="menu_beg1_3")],
-            [InlineKeyboardButton("🔙 بازگشت", callback_data="back_main")]
+            [InlineKeyboardButton("بخش اول: بازارهای مالی", callback_data="menu_beg1_1")],
+            [InlineKeyboardButton("بخش دوم: تحلیل بازار", callback_data="menu_beg1_2")],
+            [InlineKeyboardButton("بخش سوم: ابزارهای کاربردی", callback_data="menu_beg1_3")],
+            [InlineKeyboardButton("بازگشت", callback_data="back_main")],
+            [InlineKeyboardButton("جزئیات بیشتر", url="https://t.me/Amuzesh_cafetradeTvaf/84")]
         ]
 
         await query.message.edit_text(
-            "📘 فصل اول: سطح ابتدایی\n\nلطفاً یکی از بخش‌ها را انتخاب نمایید:",
+            "فصل اول: سطح ابتدایی\n\nلطفاً یکی از بخش‌ها را انتخاب نمایید:",
             reply_markup=InlineKeyboardMarkup(buttons)
         )
 
@@ -59,7 +60,8 @@ async def button_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
         section_sessions = {k: v for k, v in sessions.items() if k.startswith(f"beg1_{section}_")}
 
         buttons = [[InlineKeyboardButton(v["title"], callback_data=k)] for k, v in section_sessions.items()]
-        buttons.append([InlineKeyboardButton("🔙 بازگشت", callback_data="menu_beginner")])
+        buttons.append([InlineKeyboardButton("بازگشت", callback_data="menu_beginner")])
+        buttons.append([InlineKeyboardButton("جزئیات بیشتر", url="https://t.me/Amuzesh_cafetradeTvaf/84")])
 
         await query.message.edit_text(
             "لطفاً جلسه مورد نظر خود را انتخاب نمایید:",
@@ -74,22 +76,16 @@ async def button_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
         else:
             await query.message.reply_text("این جلسه در حال حاضر در دسترس نمی‌باشد.")
 
-    # بازگشت به منوی اصلی
+    # بازگشت
     elif data == "back_main":
         await start(update, context)
 
     # فصل‌های دیگر
     elif data == "menu_advanced":
-        await query.message.reply_text("📗 فصل پیشرفته به‌زودی در دسترس قرار خواهد گرفت.")
+        await query.message.reply_text("فصل پیشرفته به‌زودی در دسترس قرار خواهد گرفت.")
 
     elif data == "menu_project":
-        await query.message.reply_text("🏁 فصل پروژه عملی به‌زودی اضافه خواهد شد.")
-
-    # جزئیات بیشتر (بدون لینک)
-    elif data == "details_more":
-        await query.message.reply_text(
-            "📌 جهت دریافت جزئیات کامل آموزش‌ها، لطفاً به کانال مراجعه نمایید."
-        )
+        await query.message.reply_text("فصل پروژه عملی به‌زودی اضافه خواهد شد.")
 
 # --- اجرا ---
 if __name__ == "__main__":
