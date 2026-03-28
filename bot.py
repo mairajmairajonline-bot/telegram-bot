@@ -24,8 +24,7 @@ sessions = {
 
     # فصل اول: ابتدایی / بخش سوم: ابزار کاربردی
     "beg1_3_1": {"title": "جلسه اول: ابزار کاربردی ۱", "file_id": None, "caption": "این جلسه هنوز در دسترس نیست."},
-    "beg1_3_2": {"title": "جلسه دوم: ابزار کاربردی ۲", "file_id": None, "caption": "این جلسه هنوز در دسترس نیست."},
-}
+    }
 
 # --- استارت ---
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
