@@ -42,9 +42,10 @@ user_state = {}  # chat_id -> {"last_session": session_id}
 
 # --- تابع ساخت دکمه‌ها ---
 def build_buttons(items, chat_id=None, back_callback="main"):
-    buttons = [[InlineKeyboardButton(item["title"] if isinstance(item, dict) else item, 
-                                     callback_data=item if isinstance(item, str) else item["callback"])] 
-               for item in items]
+    buttons = [[InlineKeyboardButton(
+        item["title"] if isinstance(item, dict) else item,
+        callback_data=item if isinstance(item, str) else item["callback"]
+    )] for item in items]
     # اضافه کردن دکمه ادامه آخرین جلسه
     if chat_id and chat_id in user_state and user_state[chat_id].get("last_session"):
         buttons.insert(0, [InlineKeyboardButton("🔄 ادامه آخرین جلسه", callback_data="last")])
@@ -80,19 +81,20 @@ async def button_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
     # ادامه آخرین جلسه
     if data == "last" and chat_id in user_state and user_state[chat_id].get("last_session"):
         last = user_state[chat_id]["last_session"]
-        await query.message.delete()
-        await context.bot.send_video(chat_id=chat_id, video=sessions[last]["file_id"], caption=sessions[last]["caption"])
-        return  # فقط ویدیو ارسال شد، منو تغییر نمی‌کند
+        try:
+            await context.bot.send_video(chat_id=chat_id, video=sessions[last]["file_id"], caption=sessions[last]["caption"])
+        except TelegramError as e:
+            logger.error(e)
+        return  # منو دست نخورده باقی می‌ماند
 
     # معرفی دوره
     if data == "intro":
         user_state[chat_id]["last_session"] = "intro"
         try:
-            await query.message.delete()
             await context.bot.send_video(chat_id=chat_id, video=sessions["intro"]["file_id"], caption=sessions["intro"]["caption"])
         except TelegramError as e:
             logger.error(e)
-        return  # منو همان‌طور باقی می‌ماند
+        return  # منو دست نخورده باقی می‌ماند
 
     # بازگشت به منوی اصلی
     if data == "main":
@@ -109,9 +111,7 @@ async def button_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
         f_key = "فصل اول: ابتدایی" if data=="f1" else "فصل دوم: پیشرفته" if data=="f2" else "فصل سوم: پروژه عملی"
         sections = list(menu_structure[f_key].keys())
         if not sections:
-            await query.message.edit_text(f"{f_key}\n⚠️ این فصل هنوز آماده نشده و جلساتی ندارد.", reply_markup=InlineKeyboardMarkup([
-                [InlineKeyboardButton("بازگشت", callback_data="main")]
-            ]))
+            await query.message.edit_text(f"{f_key}\n⚠️ این فصل هنوز آماده نشده و جلساتی ندارد.", reply_markup=InlineKeyboardMarkup([[InlineKeyboardButton("بازگشت", callback_data="main")]]))
             return
         buttons = [{"title": s, "callback": f"section_{f_key}_{i}"} for i,s in enumerate(sections)]
         await query.message.edit_text(f"{f_key}\nبخش مورد نظر را انتخاب کنید:", reply_markup=build_buttons(buttons, chat_id=chat_id, back_callback="main"))
@@ -132,11 +132,10 @@ async def button_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
     if data in sessions:
         user_state[chat_id]["last_session"] = data
         try:
-            await query.message.delete()  # فقط پیام جلسه حذف می‌شود
             await context.bot.send_video(chat_id=chat_id, video=sessions[data]["file_id"], caption=sessions[data]["caption"])
         except TelegramError as e:
             logger.error(e)
-        return  # منو همان‌طور باقی می‌ماند
+        return  # منو دست نخورده باقی می‌ماند
 
 # --- هندلر خطا ---
 async def error_handler(update: object, context: ContextTypes.DEFAULT_TYPE):
