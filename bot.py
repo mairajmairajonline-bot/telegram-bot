@@ -13,27 +13,43 @@ logger = logging.getLogger(__name__)
 TOKEN = os.environ.get("TELEGRAM_BOT_TOKEN")
 CHANNEL_LINK = "https://t.me/Amuzesh_cafetradeTvaf/84"
 
+# -------------------- جلسات و کپشن‌ها --------------------
 sessions = {
-    "intro": {"title": "معرفی دوره", "file_id": "BAACAgUAAxkBAAMUacguqjJioLir0_Slh2oxXeX7RtwAAikdAAK-qZhV4-NL-2f6R0Y6BA"},
-    "beg1_1_1": {"title": "جلسه اول: تعریف ساده بازارهای مالی", "file_id": "BAACAgUAAxkBAAMVacguqsUgRSWfxHTBOKw25G7WGcUAAjgdAAK-qZhVBq6dWRpZJN46BA"},
-    "beg1_1_2": {"title": "جلسه دوم: ماهیت بازارهای مالی", "file_id": "BAACAgUAAxkBAAMWacguqomeue1TnljEAAE32XUDcG-kAAJHHQACvqmYVZRdzsn-twr6OgQ"},
-    "beg1_1_3": {"title": "جلسه سوم: تریدر کیست", "file_id": "BAACAgUAAxkBAAMXacguqjFHva0sNJqMQU823xJWsiAAAlEdAAK-qZhVfgocOT6_1gk6BA"},
-    "beg1_1_4": {"title": "جلسه چهارم: انواع سبک‌های ترید", "file_id": "BAACAgUAAxkBAAMYacguqgFRh3FlotgC-HMkPimgGlwAAg8dAAIpZ7BVHnpO0EQ-0Jc6BA"},
-    "beg1_1_5": {"title": "جلسه پنجم: نکات کلیدی برای شروع ترید", "file_id": "BAACAgUAAxkBAAMZacguqkRSe_qBmbMqVYFmLcwGHZ4AAkAeAAIaGrBVrvNEiiRia-A6BA"},
-    "beg1_1_6": {"title": "جلسه ششم: خلاصه و جمع‌بندی", "file_id": "BAACAgUAAxkBAAMaacguqsV443jxKgTT3roWGBBeh8wAAlseAAIaGrBV6SJRv8Q1eDw6BA"},
-    "beg1_2_1": {"title": "جلسه اول: آشنایی با تحلیل بازار", "file_id": "BAACAgUAAxkBAAMbacguqsR5nOj-1SOzWPiKE80uTLYAAjIcAAIRfclVy88EIhjFgDE6BA"},
-    "beg1_2_2": {"title": "جلسه دوم: معرفی سبک‌های تحلیلی", "file_id": "BAACAgUAAxkBAAMcacguqtb1mWlIQ5Sy-wa6rjul5K8AAqgcAAIRfclVPSaCZvCnKcE6BA"},
-    "beg1_2_3": {"title": "جلسه سوم: اندیکاتورها و سیگنال‌ها", "file_id": "BAACAgUAAxkBAAMdacguqirEzGS62fnm7gssiHiQmP8AAn0hAALnm8hVCrd2Yn5-rdU6BA"},
-    "beg1_2_4": {"title": "جلسه چهارم: تحلیل فاندامنتال", "file_id": "BAACAgUAAxkBAAMeacguqnoWSaUajxBjsw6kk4BQVSQAAkUaAAJE2SFW85cBSARvS5g6BA"},
-    "beg1_2_5": {"title": "جلسه پنجم: تعریف ساده داده‌ها", "file_id": "BAACAgUAAxkBAAMfacguqlSw53-PkJFbJk3uq4pHsnMAAjEaAAJE2SFWqxfcvUYgke46BA"},
+    "intro": {
+        "title": "معرفی دوره",
+        "file_id": "VIDEO_FILE_ID_INTRO",
+        "caption": """آموزش بازار های مالی صفر تا صد:
+📚 معرفی دوره
+🔹 در این ویدیو درباره شروع دوره و ساختار کامل کورس توضیح داده شده است.
+@cafetradetvaf"""
+    },
+    # فصل اول: ابتدایی
+    "beg1_1_1": {"title": "جلسه اول: تعریف ساده بازارهای مالی", "file_id": "VIDEO_FILE_ID_1_1_1", "caption": "📚 فصل اول: ابتدایی\n📊 بخش اول: بازارهای مالی\n🎓 جلسه اول: تعریف ساده بازارهای مالی\n✅ توضیح بازار و انواع آن\n@cafetradetvaf"},
+    "beg1_1_2": {"title": "جلسه دوم: ماهیت بازارهای مالی", "file_id": "VIDEO_FILE_ID_1_1_2", "caption": "📚 فصل اول: ابتدایی\n📊 بخش اول: بازارهای مالی\n🎓 جلسه دوم: ماهیت بازارهای مالی\n✅ بررسی انواع بازارها و مدیریت سرمایه\n@cafetradetvaf"},
+    "beg1_1_3": {"title": "جلسه سوم: تریدر کیست", "file_id": "VIDEO_FILE_ID_1_1_3", "caption": "📚 فصل اول: ابتدایی\n📊 بخش اول: بازارهای مالی\n🎓 جلسه سوم: تریدر کیست\n✅ تفاوت تریدر و سرمایه گذار و نقش هر کدام\n@cafetradetvaf"},
+    "beg1_1_4": {"title": "جلسه چهارم: انواع سبک‌های ترید", "file_id": "VIDEO_FILE_ID_1_1_4", "caption": "📚 فصل اول: ابتدایی\n📊 بخش اول: بازارهای مالی\n🎓 جلسه چهارم: انواع سبک‌های ترید\n✅ آشنایی با سویینگ، اسکالپینگ و دیتریدینگ\n@cafetradetvaf"},
+    "beg1_1_5": {"title": "جلسه پنجم: نکات کلیدی برای شروع ترید", "file_id": "VIDEO_FILE_ID_1_1_5", "caption": "📚 فصل اول: ابتدایی\n📊 بخش اول: بازارهای مالی\n🎓 جلسه پنجم: نکات کلیدی برای شروع ترید\n✅ شروع ترید و چالش‌ها و حقایق بازار\n@cafetradetvaf"},
+    "beg1_1_6": {"title": "جلسه ششم: خلاصه و جمع‌بندی", "file_id": "VIDEO_FILE_ID_1_1_6", "caption": "📚 فصل اول: ابتدایی\n📊 بخش اول: بازارهای مالی\n🎓 جلسه ششم: خلاصه و جمع‌بندی\n✅ مرور تمام جلسات قبلی\n@cafetradetvaf"},
+    "beg1_2_1": {"title": "جلسه اول: آشنایی با تحلیل بازار", "file_id": "VIDEO_FILE_ID_1_2_1", "caption": "📚 فصل اول: ابتدایی\n📊 بخش دوم: تحلیل بازار\n🎓 جلسه اول: آشنایی با تحلیل بازار\n✅ اهمیت تحلیل بازار و زمان‌بندی خرید و فروش\n@cafetradetvaf"},
+    "beg1_2_2": {"title": "جلسه دوم: معرفی سبک‌های تحلیلی", "file_id": "VIDEO_FILE_ID_1_2_2", "caption": "📚 فصل اول: ابتدایی\n📊 بخش دوم: تحلیل بازار\n🎓 جلسه دوم: معرفی سبک‌های تحلیلی\n✅ تحلیل تکنیکال و Price Action، RTM، ICT و Order Flow\n@cafetradetvaf"},
+    "beg1_2_3": {"title": "جلسه سوم: اندیکاتورها و سیگنال‌ها", "file_id": "VIDEO_FILE_ID_1_2_3", "caption": "📚 فصل اول: ابتدایی\n📊 بخش دوم: تحلیل بازار\n🎓 جلسه سوم: اندیکاتورها و سیگنال‌ها\n✅ آشنایی با اندیکاتورها و سیگنال‌های معاملاتی\n@cafetradetvaf"},
+    "beg1_2_4": {"title": "جلسه چهارم: تحلیل فاندامنتال", "file_id": "VIDEO_FILE_ID_1_2_4", "caption": "📚 فصل اول: ابتدایی\n📊 بخش دوم: تحلیل بازار\n🎓 جلسه چهارم: تحلیل فاندامنتال\n✅ اهمیت اخبار اقتصادی و تأثیر آن بر بازار\n@cafetradetvaf"},
+    "beg1_2_5": {"title": "جلسه پنجم: تعریف ساده داده‌ها", "file_id": "VIDEO_FILE_ID_1_2_5", "caption": "📚 فصل اول: ابتدایی\n📊 بخش دوم: تحلیل بازار\n🎓 جلسه پنجم: تعریف ساده داده‌ها\n✅ مفاهیم اقتصادی مانند نرخ بهره و تورم\n@cafetradetvaf"},
+    # فصل دوم: پیشرفته
+    "beg2_1_1": {"title": "جلسه اول: تحلیل تکنیکال پیشرفته", "file_id": "VIDEO_FILE_ID_2_1_1", "caption": "📚 فصل دوم: پیشرفته\n📊 بخش اول: تحلیل پیشرفته\n🎓 جلسه اول: تحلیل تکنیکال پیشرفته\n✅ ابزارها و الگوهای پیشرفته تکنیکال\n@cafetradetvaf"},
+    "beg2_1_2": {"title": "جلسه دوم: مدیریت سرمایه پیشرفته", "file_id": "VIDEO_FILE_ID_2_1_2", "caption": "📚 فصل دوم: پیشرفته\n📊 بخش اول: تحلیل پیشرفته\n🎓 جلسه دوم: مدیریت سرمایه پیشرفته\n✅ تکنیک‌های مدیریت ریسک و سرمایه\n@cafetradetvaf"},
+    "beg2_1_3": {"title": "جلسه سوم: روانشناسی معامله‌گر", "file_id": "VIDEO_FILE_ID_2_1_3", "caption": "📚 فصل دوم: پیشرفته\n📊 بخش اول: تحلیل پیشرفته\n🎓 جلسه سوم: روانشناسی معامله‌گر\n✅ کنترل احساسات و تصمیم‌گیری در بازار\n@cafetradetvaf"},
 }
 
+# -------------------- ساختار منو --------------------
 menu_structure = {
     "فصل اول: ابتدایی": {
         "بخش اول: بازارهای مالی": ["beg1_1_1","beg1_1_2","beg1_1_3","beg1_1_4","beg1_1_5","beg1_1_6"],
         "بخش دوم: تحلیل بازار": ["beg1_2_1","beg1_2_2","beg1_2_3","beg1_2_4","beg1_2_5"],
     },
-    "فصل دوم: پیشرفته": {},
+    "فصل دوم: پیشرفته": {
+        "بخش اول: تحلیل پیشرفته": ["beg2_1_1","beg2_1_2","beg2_1_3"],
+    },
     "فصل سوم: پروژه عملی": {},
 }
 
@@ -48,38 +64,39 @@ def main_menu_markup():
         [InlineKeyboardButton("📋 جزئیات بیشتر", url=CHANNEL_LINK)]
     ])
 
+# -------------------- start handler --------------------
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await update.message.reply_text(MAIN_MENU_TEXT, reply_markup=main_menu_markup())
 
+# -------------------- button handler --------------------
 async def button_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
     query = update.callback_query
     await query.answer()
     data = query.data
+    chat_id = query.message.chat_id
 
-    # ارسال ویدیو بدون تغییر پیام منو
+    # ارسال ویدیو با کپشن، پیام منو در پایین
     if data in sessions:
         s = sessions[data]
-        chat_id = query.message.chat_id
         try:
-            await context.bot.send_video(chat_id=chat_id, video=s["file_id"], caption=s["title"])
+            await context.bot.send_video(chat_id=chat_id, video=s["file_id"], caption=s["caption"], parse_mode="HTML")
         except TelegramError as e:
             logger.error(f"Failed to send video for {data}: {e}")
             await context.bot.send_message(chat_id=chat_id, text=f"خطا در ارسال ویدیو:\n{e}")
         return
 
-    # بازگشت به منوی اصلی
+    # منو اصلی
     if data == "main":
         await query.message.edit_text(MAIN_MENU_TEXT, reply_markup=main_menu_markup())
         return
 
     # معرفی دوره
     if data == "intro":
-        chat_id = query.message.chat_id
+        s = sessions["intro"]
         try:
-            await context.bot.send_video(chat_id=chat_id, video=sessions["intro"]["file_id"], caption="معرفی دوره")
+            await context.bot.send_video(chat_id=chat_id, video=s["file_id"], caption=s["caption"], parse_mode="HTML")
         except TelegramError as e:
             logger.error(f"Failed to send intro video: {e}")
-            await context.bot.send_message(chat_id=chat_id, text=f"خطا در ارسال ویدیو:\n{e}")
         return
 
     # فصل اول
@@ -89,16 +106,20 @@ async def button_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
         await query.message.edit_text("فصل اول: ابتدایی\nبخش مورد نظر را انتخاب کنید:", reply_markup=InlineKeyboardMarkup(buttons))
         return
 
-    # فصل دوم و سوم
-    if data in ("f2", "f3"):
-        await query.message.edit_text(
-            "این فصل فعلاً در دسترس نیست.",
-            reply_markup=InlineKeyboardMarkup([[InlineKeyboardButton("بازگشت", callback_data="main")]])
-        )
+    # فصل دوم
+    if data == "f2":
+        buttons = [[InlineKeyboardButton(b, callback_data=f"f2_{i}")] for i, b in enumerate(menu_structure["فصل دوم: پیشرفته"].keys())]
+        buttons.append([InlineKeyboardButton("بازگشت", callback_data="main")])
+        await query.message.edit_text("فصل دوم: پیشرفته\nبخش مورد نظر را انتخاب کنید:", reply_markup=InlineKeyboardMarkup(buttons))
         return
 
-    # بخش‌های فصل اول
-    if "_" in data and data.startswith("f") and data[1].isdigit():
+    # فصل سوم
+    if data == "f3":
+        await query.message.edit_text("این فصل فعلاً در دسترس نیست.", reply_markup=InlineKeyboardMarkup([[InlineKeyboardButton("بازگشت", callback_data="main")]]))
+        return
+
+    # نمایش جلسات بخش‌ها
+    if "_" in data and data[0] == "f":
         f_key, idx = data.split("_", 1)
         idx = int(idx)
         if f_key == "f1":
@@ -107,8 +128,14 @@ async def button_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
             buttons = [[InlineKeyboardButton(sessions[s]["title"], callback_data=s)] for s in sessions_list]
             buttons.append([InlineKeyboardButton("بازگشت", callback_data="f1")])
             await query.message.edit_text(f"{section_name}\nجلسه مورد نظر را انتخاب کنید:", reply_markup=InlineKeyboardMarkup(buttons))
-        return
+        elif f_key == "f2":
+            section_name = list(menu_structure["فصل دوم: پیشرفته"].keys())[idx]
+            sessions_list = menu_structure["فصل دوم: پیشرفته"][section_name]
+            buttons = [[InlineKeyboardButton(sessions[s]["title"], callback_data=s)] for s in sessions_list]
+            buttons.append([InlineKeyboardButton("بازگشت", callback_data="f2")])
+            await query.message.edit_text(f"{section_name}\nجلسه مورد نظر را انتخاب کنید:", reply_markup=InlineKeyboardMarkup(buttons))
 
+# -------------------- main --------------------
 async def error_handler(update: object, context: ContextTypes.DEFAULT_TYPE) -> None:
     logger.error("Exception while handling update:", exc_info=context.error)
 
