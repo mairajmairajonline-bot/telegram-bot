@@ -89,7 +89,7 @@ async def button_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
     elif query.data == "more_details":
         await query.message.reply_text(
-            f"برای جزییات بیشتر به کانال مراجعه کنید:\n{CHANNEL_LINK}\n\nhttps://t.me/Amuzesh_cafetradeTvaf/84"
+            f"برای جزییات بیشتر به کانال مراجعه کنید:\n{CHANNEL_LINK}\n\nhttps://t.me/Amuzesh_cafetradeTvaf"
         )
 
 # --- اجرای ربات ---
