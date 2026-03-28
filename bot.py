@@ -159,7 +159,24 @@ async def button_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
         except TelegramError as e:
             logger.error(e)
         await context.bot.send_message(chat_id=chat_id, text=MAIN_MENU_TEXT, reply_markup=main_menu_markup())
+# --- اضافه کردن فصل سوم بدون جلسات ---
+menu_structure["فصل سوم: پروژه عملی"] = {}  # هنوز جلسه‌ای ندارد
 
+# --- در هندلر دکمه‌ها اضافه کنید ---
+if data.startswith("f"):
+    f_key = "فصل اول: ابتدایی" if data=="f1" else "فصل دوم: پیشرفته" if data=="f2" else "فصل سوم: پروژه عملی"
+    sections = list(menu_structure[f_key].keys())
+    
+    if not sections:  # فصل بدون جلسه
+        await query.message.edit_text(f"{f_key}\n⚠️ این فصل هنوز آماده نشده و جلساتی ندارد.", reply_markup=InlineKeyboardMarkup([
+            [InlineKeyboardButton("بازگشت", callback_data="main")]
+        ]))
+        return
+
+    buttons = [[InlineKeyboardButton(s, callback_data=f"section_{f_key}_{i}")] for i,s in enumerate(sections)]
+    buttons.append([InlineKeyboardButton("بازگشت", callback_data="main")])
+    await query.message.edit_text(f"{f_key}\nبخش مورد نظر را انتخاب کنید:", reply_markup=InlineKeyboardMarkup(buttons))
+    return
 async def error_handler(update: object, context: ContextTypes.DEFAULT_TYPE):
     logger.error("Exception:", exc_info=context.error)
 
