@@ -63,8 +63,8 @@ menu_structure = {
         "بخش اول: بازارهای مالی": ["beg1_1_1","beg1_1_2","beg1_1_3","beg1_1_4","beg1_1_5","beg1_1_6"],
         "بخش دوم: تحلیل بازار": ["beg1_2_1","beg1_2_2","beg1_2_3","beg1_2_4","beg1_2_5"],
     },
-    "فصل دوم: پیشرفته": {},  # هنوز آماده نشده
-    "فصل سوم: پروژه عملی": {}  # هنوز آماده نشده
+    "فصل دوم: پیشرفته": {},
+    "فصل سوم: پروژه عملی": {}
 }
 
 MAIN_MENU_TEXT = "سیستم آموزشی بازارهای مالی صفر تا صد\nلطفاً فصل مورد نظر را انتخاب کنید:"
@@ -78,8 +78,13 @@ def main_menu_markup():
         [InlineKeyboardButton("📋 جزئیات بیشتر", url=CHANNEL_LINK)]
     ])
 
+# --- وضعیت کاربران ---
+user_state = {}  # chat_id -> {'current_f':..., 'current_section':...}
+
 # --- هندلر استارت ---
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    chat_id = update.message.chat_id
+    user_state[chat_id] = {'current_f': None, 'current_section': None}
     await update.message.reply_text(MAIN_MENU_TEXT, reply_markup=main_menu_markup())
 
 # --- هندلر دکمه‌ها ---
@@ -88,6 +93,9 @@ async def button_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await query.answer()
     data = query.data
     chat_id = query.message.chat_id
+
+    if chat_id not in user_state:
+        user_state[chat_id] = {'current_f': None, 'current_section': None}
 
     # معرفی دوره
     if data == "intro":
@@ -101,15 +109,18 @@ async def button_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
     # بازگشت به منوی اصلی
     if data == "main":
+        user_state[chat_id] = {'current_f': None, 'current_section': None}
         await query.message.edit_text(MAIN_MENU_TEXT, reply_markup=main_menu_markup())
         return
 
     # انتخاب فصل
     if data.startswith("f"):
         f_key = "فصل اول: ابتدایی" if data=="f1" else "فصل دوم: پیشرفته" if data=="f2" else "فصل سوم: پروژه عملی"
-        sections = list(menu_structure[f_key].keys())
+        user_state[chat_id]['current_f'] = f_key
+        user_state[chat_id]['current_section'] = None
 
-        if not sections:  # فصل بدون جلسه
+        sections = list(menu_structure[f_key].keys())
+        if not sections:
             await query.message.edit_text(f"{f_key}\n⚠️ این فصل هنوز آماده نشده و جلساتی ندارد.", reply_markup=InlineKeyboardMarkup([
                 [InlineKeyboardButton("بازگشت", callback_data="main")]
             ]))
@@ -126,6 +137,7 @@ async def button_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
         idx = int(idx)
         sections = list(menu_structure[f_key].keys())
         section_name = sections[idx]
+        user_state[chat_id]['current_section'] = section_name
         sessions_list = menu_structure[f_key][section_name]
         buttons = [[InlineKeyboardButton(sessions[s]["title"], callback_data=s)] for s in sessions_list]
         buttons.append([InlineKeyboardButton("بازگشت", callback_data="f1" if f_key=="فصل اول: ابتدایی" else "main")])
