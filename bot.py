@@ -36,7 +36,7 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
         [InlineKeyboardButton("جزئیات بیشتر", callback_data="more_details")]
     ]
     keyboard = InlineKeyboardMarkup(buttons)
-    await update.message.reply_text("یک فصل را انتخاب کنید:", reply_markup=keyboard)
+    await update.message.reply_text("فصل مورد نیاز را انتخاب کنید:", reply_markup=keyboard)
 
 # --- گرفتن file_id ویدیو ---
 async def get_file_id(update: Update, context: ContextTypes.DEFAULT_TYPE):
@@ -88,9 +88,8 @@ async def button_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
         await query.message.reply_text("فصل سوم: پروژه عملی - به زودی اضافه می‌شود.")
 
     elif query.data == "more_details":
-        await query.message.reply_text(
-            f"برای جزییات بیشتر به کانال مراجعه کنید:\n{CHANNEL_LINK}\n\nhttps://t.me/Amuzesh_cafetradeTvaf"
-        )
+        buttons = [[InlineKeyboardButton("📋 مشاهده جزئیات", url="https://t.me/Amuzesh_cafetradeTvaf/84")]]
+        await query.message.reply_text("برای جزئیات بیشتر:", reply_markup=InlineKeyboardMarkup(buttons))
 
 # --- اجرای ربات ---
 if __name__ == "__main__":
