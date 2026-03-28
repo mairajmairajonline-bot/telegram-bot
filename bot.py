@@ -12,26 +12,59 @@ logger = logging.getLogger(__name__)
 
 TOKEN = os.environ.get("TELEGRAM_BOT_TOKEN")
 
+# --- جلسات فصل اول با کپشن کامل ---
 sessions = {
-    "intro": {"title": "معرفی دوره", "file_id": "BAACAgUAAxkBAAMUacguqjJioLir0_Slh2oxXeX7RtwAAikdAAK-qZhV4-NL-2f6R0Y6BA",
-              "caption": "📚 معرفی دوره\n@cafetradetvaf"},
-    "beg1_1_1": {"title": "جلسه اول", "file_id": "BAACAgUAAxkBAAMVacguqsUgRSWfxHTBOKw25G7WGcUAAjgdAAK-qZhVBq6dWRpZJN46BA",
-                 "caption": "📚 جلسه اول\n@cafetradetvaf"},
-    "beg1_1_2": {"title": "جلسه دوم", "file_id": "BAACAgUAAxkBAAMWacguqomeue1TnljEAAE32XUDcG-kAAJHHQACvqmYVZRdzsn-twr6OgQ",
-                 "caption": "📚 جلسه دوم\n@cafetradetvaf"},
+    "intro": {"title": "معرفی دوره",
+              "file_id": "BAACAgUAAxkBAAMUacguqjJioLir0_Slh2oxXeX7RtwAAikdAAK-qZhV4-NL-2f6R0Y6BA",
+              "caption": "📚 آموزش بازار های مالی صفر تا صد:\n📚 معرفی دوره\n\n🔹در این ویدیو درباره شروع دوره و ساختار کامل کورس توضیح داده شده است.\nهمچنین با سرفصل‌ها و مراحل آموزشی دوره آشنا می‌شوید.\n\n@cafetradetvaf"},
+    "beg1_1_1": {"title": "جلسه اول: تعریف ساده بازارهای مالی",
+                 "file_id": "BAACAgUAAxkBAAMVacguqsUgRSWfxHTBOKw25G7WGcUAAjgdAAK-qZhVBq6dWRpZJN46BA",
+                 "caption": "📚 فصل اول: ابتدایی\n📊 بخش اول: بازارهای مالی\n🎓 جلسه اول: تعریف ساده بازار های مالی\n\n✅ در این جلسه با تعریف ساده بازار، انواع بازارها، پیدایش و ضرورت بازارهای مالی و بسیاری موضوعات مهم دیگر آشنا می‌شوید.\n\n@cafetradetvaf"},
+    "beg1_1_2": {"title": "جلسه دوم: ماهیت بازارهای مالی",
+                 "file_id": "BAACAgUAAxkBAAMWacguqomeue1TnljEAAE32XUDcG-kAAJHHQACvqmYVZRdzsn-twr6OgQ",
+                 "caption": "📚 فصل اول: ابتدایی\n📊 بخش اول: بازارهای مالی\n🎓 جلسه دوم: ماهیت بازار های مالی\n\n✅ در این جلسه انواع بازارهای مالی به‌صورت واضح و منظم توضیح داده شده و تمام جزئیات مربوط به انواع بازارهای مالی و مدیریت سرمایه مورد بحث قرار گرفته است.\n\n@cafetradetvaf"},
+    "beg1_1_3": {"title": "جلسه سوم: تریدر کیست",
+                 "file_id": "BAACAgUAAxkBAAMXacguqjFHva0sNJqMQU823xJWsiAAAlEdAAK-qZhVfgocOT6_1gk6BA",
+                 "caption": "📚 فصل اول: ابتدایی\n📊 بخش اول: بازارهای مالی\n🎓 جلسه سوم: تریدر کیست\n\n✅ در این جلسه ترید چیست ، تریدر کیست، سرمایه گذار کیست، تفاوت تریدر و سرمایه گذار تمام محتوا با جزییات ترتیب شده و خیلی مفصل و ساده بیان شده برای درک بهتر.\n\n@cafetradetvaf"},
+    "beg1_1_4": {"title": "جلسه چهارم: انواع سبک‌های ترید",
+                 "file_id": "BAACAgUAAxkBAAMYacguqgFRh3FlotgC-HMkPimgGlwAAg8dAAIpZ7BVHnpO0EQ-0Jc6BA",
+                 "caption": "📚 فصل اول: ابتدایی\n📊 بخش اول: بازارهای مالی\n🎓 جلسه چهارم: انواع سبک‌های ترید\n\n✅ در این جلسه با انواع روش‌های سرمایه‌گذاری و سبک‌های مختلف ترید مانند سویینگ تریدینگ، اسکالپینگ و دیتریدینگ آشنا می‌شوید و یاد می‌گیرید هر کدام چه ویژگی‌ها و کاربردی دارند.\n\n@cafetradetvaf"},
+    "beg1_1_5": {"title": "جلسه پنجم: نکات کلیدی برای شروع ترید",
+                 "file_id": "BAACAgUAAxkBAAMZacguqkRSe_qBmbMqVYFmLcwGHZ4AAkAeAAIaGrBVrvNEiiRia-A6BA",
+                 "caption": "📚 فصل اول: ابتدایی\n📊 بخش اول: بازارهای مالی\n🎓 جلسه پنجم: نکات کلیدی برای شروع ترید\n\n✅ در این جلسه بررسی می‌کنیم آیا می‌توان فقط روی ترید حساب کرد یا نه. همچنین با چند حقیقت مهم درباره بازارهای مالی آشنا می‌شویم و می‌فهمیم شروع ترید چقدر آسان یا چالش‌برانگیز است.\n\n@cafetradetvaf"},
+    "beg1_1_6": {"title": "جلسه ششم: خلاصه و جمع‌بندی",
+                 "file_id": "BAACAgUAAxkBAAMaacguqsV443jxKgTT3roWGBBeh8wAAlseAAIaGrBV6SJRv8Q1eDw6BA",
+                 "caption": "📚 فصل اول: ابتدایی\n📊 بخش اول: بازارهای مالی\n🎓 جلسه ششم: خلاصه و جمع بندی\n\n✅ در این جلسه یک مرور کوتاه و جمع‌بندی از تمام موضوعاتی که در جلسات قبلی گفته شد انجام می‌دهیم تا نکات مهم دوباره یادآوری و در ذهن شما تثبیت شود.\n\n@cafetradetvaf"},
+    # --- بخش دوم تحلیل بازار ---
+    "beg1_2_1": {"title": "جلسه اول: آشنایی با تحلیل بازار",
+                 "file_id": "BAACAgUAAxkBAAMbacguqsR5nOj-1SOzWPiKE80uTLYAAjIcAAIRfclVy88EIhjFgDE6BA",
+                 "caption": "📚 فصل اول: ابتدایی\n📊 بخش دوم: تحلیل بازار\n🎓 جلسه اول: آشنایی با تحلیل بازار\n\n✅ در این جلسه با مفهوم تحلیل بازار آشنا می‌شویم، می‌فهمیم تحلیل بازار چیست، چرا برای معامله‌گران مهم است و چگونه کمک می‌کند تا زمان مناسب خرید، فروش یا صبر در بازارهای مالی را بهتر تشخیص دهیم.\n\n@cafetradetvaf"},
+    "beg1_2_2": {"title": "جلسه دوم: معرفی سبک‌های تحلیلی",
+                 "file_id": "BAACAgUAAxkBAAMcacguqtb1mWlIQ5Sy-wa6rjul5K8AAqgcAAIRfclVPSaCZvCnKcE6BA",
+                 "caption": "📚 فصل اول: ابتدایی\n📊 بخش دوم: تحلیل بازار\n🎓 جلسه دوم: معرفی سبک های تحلیلی\n\n✅ در این جلسه با اهمیت تحلیل تکنیکال در معامله‌گری آشنا شویم و نگاهی کوتاه به سبک‌های مختلف آن مانند Price Action، RTM، ICT و Order Flow داشته باشیم تا بدانیم معامله‌گران با چه روش‌هایی بازار را تحلیل می‌کنند.\n\n@cafetradetvaf"},
+    "beg1_2_3": {"title": "جلسه سوم: اندیکاتورها و سیگنال‌ها",
+                 "file_id": "BAACAgUAAxkBAAMdacguqirEzGS62fnm7gssiHiQmP8AAn0hAALnm8hVCrd2Yn5-rdU6BA",
+                 "caption": "📚 فصل اول: ابتدایی\n📊 بخش دوم: تحلیل بازار\n🎓 جلسه سوم: آشنایی با اندیکاتورها و سیگنال‌های معاملاتی\n\n✅ هدف این جلسه آشنایی با مفهوم اندیکاتورها و درک درست از سیگنال‌های معاملاتی است.\n\n@cafetradetvaf"},
+    "beg1_2_4": {"title": "جلسه چهارم: تحلیل فاندامنتال",
+                 "file_id": "BAACAgUAAxkBAAMeacguqnoWSaUajxBjsw6kk4BQVSQAAkUaAAJE2SFW85cBSARvS5g6BA",
+                 "caption": "📚 فصل اول: ابتدایی\n📊 بخش دوم: تحلیل بازار\n🎓 جلسه چهارم: آشنایی با تحلیل فاندامنتال\n\n✅ هدف امروز این است که با مفهوم اخبار اقتصادی آشنا شویم، بفهمیم چرا این اخبار برای بازارهای مالی مهم هستند و چگونه معامله‌گران از آن‌ها برای تشخیص جهت بازار و کاهش ریسک استفاده می‌کنند.\n\n@cafetradetvaf"},
+    "beg1_2_5": {"title": "جلسه پنجم: تعریف ساده داده‌ها",
+                 "file_id": "BAACAgUAAxkBAAMfacguqlSw53-PkJFbJk3uq4pHsnMAAjEaAAJE2SFWqxfcvUYgke46BA",
+                 "caption": "📚 فصل اول: ابتدایی\n📊 بخش دوم: تحلیل بازار\n🎓 جلسه پنجم: تعریف ساده داده‌ها\n\n✅ هدف امروز این است که با مفاهیم مهم اقتصادی مانند نرخ بهره، تورم و سیاست‌های اقتصادی آشنا شویم و درک کنیم تصمیم‌های بانک مرکزی چگونه بر بازارهای مالی تأثیر می‌گذارند.\n\n@cafetradetvaf"},
 }
 
+# --- ساختار منو کامل ---
 menu_structure = {
     "فصل اول: ابتدایی": {
-        "بخش اول: بازارهای مالی": ["beg1_1_1","beg1_1_2"],
-        "بخش دوم: تحلیل بازار": [],
+        "بخش اول: بازارهای مالی": ["beg1_1_1","beg1_1_2","beg1_1_3","beg1_1_4","beg1_1_5","beg1_1_6"],
+        "بخش دوم: تحلیل بازار": ["beg1_2_1","beg1_2_2","beg1_2_3","beg1_2_4","beg1_2_5"],
     },
     "فصل دوم: پیشرفته": {},
     "فصل سوم: پروژه عملی": {}
 }
 
-MAIN_MENU_TEXT = "سیستم آموزشی بازارهای مالی\nانتخاب کنید:"
-
+# --- باقی کد (منو، هندلرها، ارسال ویدیو) همانند نسخه قبلی ---
+MAIN_MENU_TEXT = "سیستم آموزشی بازارهای مالی صفر تا صد\nلطفاً انتخاب کنید:"
 user_state = {}
 
 def build_buttons(items, chat_id=None, back_callback="main"):
@@ -83,20 +116,13 @@ def get_menu(chat_id):
 
 async def send_menu(context, chat_id):
     text, markup = get_menu(chat_id)
-
     old_msg_id = user_state[chat_id].get("menu_msg_id")
     if old_msg_id:
         try:
             await context.bot.delete_message(chat_id=chat_id, message_id=old_msg_id)
         except:
             pass
-
-    msg = await context.bot.send_message(
-        chat_id=chat_id,
-        text=text,
-        reply_markup=markup
-    )
-
+    msg = await context.bot.send_message(chat_id=chat_id, text=text, reply_markup=markup)
     user_state[chat_id]["menu_msg_id"] = msg.message_id
 
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
@@ -118,12 +144,7 @@ async def button_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
         await send_menu(context, chat_id)
         return
 
-    if data.startswith("f"):
-        user_state[chat_id]["menu"] = data
-        await send_menu(context, chat_id)
-        return
-
-    if data.startswith("section_"):
+    if data.startswith("f") or data.startswith("section_"):
         user_state[chat_id]["menu"] = data
         await send_menu(context, chat_id)
         return
