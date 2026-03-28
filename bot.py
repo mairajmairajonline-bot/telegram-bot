@@ -2,7 +2,6 @@ import os
 import logging
 from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup
 from telegram.ext import ApplicationBuilder, CommandHandler, CallbackQueryHandler, ContextTypes
-from telegram.error import TelegramError
 
 logging.basicConfig(
     format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
@@ -53,7 +52,7 @@ sessions = {
                  "caption": "📚 فصل اول: ابتدایی\n📊 بخش دوم: تحلیل بازار\n🎓 جلسه پنجم: تعریف ساده داده‌ها\n\n✅ هدف امروز این است که با مفاهیم مهم اقتصادی مانند نرخ بهره، تورم و سیاست‌های اقتصادی آشنا شویم و درک کنیم تصمیم‌های بانک مرکزی چگونه بر بازارهای مالی تأثیر می‌گذارند.\n\n@cafetradetvaf"},
 }
 
-# --- ساختار منو کامل ---
+# --- ساختار منو ---
 menu_structure = {
     "فصل اول: ابتدایی": {
         "بخش اول: بازارهای مالی": ["beg1_1_1","beg1_1_2","beg1_1_3","beg1_1_4","beg1_1_5","beg1_1_6"],
@@ -63,17 +62,19 @@ menu_structure = {
     "فصل سوم: پروژه عملی": {}
 }
 
-# --- باقی کد (منو، هندلرها، ارسال ویدیو) همانند نسخه قبلی ---
 MAIN_MENU_TEXT = "سیستم آموزشی بازارهای مالی صفر تا صد\nلطفاً انتخاب کنید:"
 user_state = {}
 
-def build_buttons(items, chat_id=None, back_callback="main"):
+# --- ساخت دکمه‌ها ---
+def build_buttons(items, chat_id=None, back_callback=None):
     buttons = [[InlineKeyboardButton(item["title"], callback_data=item["callback"])] for item in items]
     if chat_id in user_state and user_state[chat_id].get("last_session"):
         buttons.insert(0, [InlineKeyboardButton("🔄 ادامه آخرین جلسه", callback_data="last")])
-    buttons.append([InlineKeyboardButton("بازگشت", callback_data=back_callback)])
+    if back_callback:
+        buttons.append([InlineKeyboardButton("بازگشت", callback_data=back_callback)])
     return InlineKeyboardMarkup(buttons)
 
+# --- منوی اصلی ---
 def main_menu(chat_id):
     items = [
         {"title": "معرفی دوره", "callback": "intro"},
@@ -81,8 +82,9 @@ def main_menu(chat_id):
         {"title": "فصل دوم: پیشرفته", "callback": "f2"},
         {"title": "فصل سوم: پروژه عملی", "callback": "f3"},
     ]
-    return MAIN_MENU_TEXT, build_buttons(items, chat_id)
+    return MAIN_MENU_TEXT, build_buttons(items, chat_id)  # بدون back_callback
 
+# --- گرفتن منو بر اساس وضعیت ---
 def get_menu(chat_id):
     state = user_state.get(chat_id, {})
     menu = state.get("menu", "main")
@@ -114,22 +116,27 @@ def get_menu(chat_id):
 
     return main_menu(chat_id)
 
+# --- ارسال منو ---
 async def send_menu(context, chat_id):
     text, markup = get_menu(chat_id)
-    old_msg_id = user_state[chat_id].get("menu_msg_id")
+    old_msg_id = user_state.get(chat_id, {}).get("menu_msg_id")
     if old_msg_id:
         try:
             await context.bot.delete_message(chat_id=chat_id, message_id=old_msg_id)
         except:
             pass
     msg = await context.bot.send_message(chat_id=chat_id, text=text, reply_markup=markup)
+    if chat_id not in user_state:
+        user_state[chat_id] = {}
     user_state[chat_id]["menu_msg_id"] = msg.message_id
 
+# --- استارت ---
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     chat_id = update.message.chat_id
     user_state[chat_id] = {"last_session": None, "menu": "main", "menu_msg_id": None}
     await send_menu(context, chat_id)
 
+# --- هندلر دکمه‌ها ---
 async def button_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
     query = update.callback_query
     await query.answer()
@@ -168,9 +175,11 @@ async def button_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
         await send_menu(context, chat_id)
         return
 
+# --- هندلر خطا ---
 async def error_handler(update: object, context: ContextTypes.DEFAULT_TYPE):
     logger.error("Error:", exc_info=context.error)
 
+# --- اجرا ---
 if __name__ == "__main__":
     app = ApplicationBuilder().token(TOKEN).build()
     app.add_handler(CommandHandler("start", start))
