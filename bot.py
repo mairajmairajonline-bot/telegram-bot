@@ -1,7 +1,7 @@
 import os
 import logging
 from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup
-from telegram.ext import ApplicationBuilder, CommandHandler, CallbackQueryHandler, MessageHandler, filters, ContextTypes
+from telegram.ext import ApplicationBuilder, CommandHandler, CallbackQueryHandler, ContextTypes
 from telegram.error import TelegramError
 
 logging.basicConfig(
@@ -48,42 +48,57 @@ def main_menu_markup():
         [InlineKeyboardButton("📋 جزئیات بیشتر", url=CHANNEL_LINK)]
     ])
 
-
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await update.message.reply_text(MAIN_MENU_TEXT, reply_markup=main_menu_markup())
-
 
 async def button_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
     query = update.callback_query
     await query.answer()
     data = query.data
 
+    # ارسال ویدیو بدون تغییر پیام منو
+    if data in sessions:
+        s = sessions[data]
+        chat_id = query.message.chat_id
+        try:
+            await context.bot.send_video(chat_id=chat_id, video=s["file_id"], caption=s["title"])
+        except TelegramError as e:
+            logger.error(f"Failed to send video for {data}: {e}")
+            await context.bot.send_message(chat_id=chat_id, text=f"خطا در ارسال ویدیو:\n{e}")
+        return
+
+    # بازگشت به منوی اصلی
+    if data == "main":
+        await query.message.edit_text(MAIN_MENU_TEXT, reply_markup=main_menu_markup())
+        return
+
+    # معرفی دوره
     if data == "intro":
         chat_id = query.message.chat_id
         try:
-            await query.message.delete()
             await context.bot.send_video(chat_id=chat_id, video=sessions["intro"]["file_id"], caption="معرفی دوره")
         except TelegramError as e:
             logger.error(f"Failed to send intro video: {e}")
             await context.bot.send_message(chat_id=chat_id, text=f"خطا در ارسال ویدیو:\n{e}")
-        await context.bot.send_message(chat_id=chat_id, text=MAIN_MENU_TEXT, reply_markup=main_menu_markup())
         return
 
-    if data == "main":
-        await query.message.edit_text(MAIN_MENU_TEXT, reply_markup=main_menu_markup())
-
-    elif data == "f1":
+    # فصل اول
+    if data == "f1":
         buttons = [[InlineKeyboardButton(b, callback_data=f"f1_{i}")] for i, b in enumerate(menu_structure["فصل اول: ابتدایی"].keys())]
         buttons.append([InlineKeyboardButton("بازگشت", callback_data="main")])
         await query.message.edit_text("فصل اول: ابتدایی\nبخش مورد نظر را انتخاب کنید:", reply_markup=InlineKeyboardMarkup(buttons))
+        return
 
-    elif data in ("f2", "f3"):
+    # فصل دوم و سوم
+    if data in ("f2", "f3"):
         await query.message.edit_text(
             "این فصل فعلاً در دسترس نیست.",
             reply_markup=InlineKeyboardMarkup([[InlineKeyboardButton("بازگشت", callback_data="main")]])
         )
+        return
 
-    elif "_" in data and data[0] == "f" and data[1].isdigit():
+    # بخش‌های فصل اول
+    if "_" in data and data.startswith("f") and data[1].isdigit():
         f_key, idx = data.split("_", 1)
         idx = int(idx)
         if f_key == "f1":
@@ -92,22 +107,10 @@ async def button_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
             buttons = [[InlineKeyboardButton(sessions[s]["title"], callback_data=s)] for s in sessions_list]
             buttons.append([InlineKeyboardButton("بازگشت", callback_data="f1")])
             await query.message.edit_text(f"{section_name}\nجلسه مورد نظر را انتخاب کنید:", reply_markup=InlineKeyboardMarkup(buttons))
-
-    elif data in sessions:
-        s = sessions[data]
-        chat_id = query.message.chat_id
-        try:
-            await query.message.delete()
-            await context.bot.send_video(chat_id=chat_id, video=s["file_id"], caption=s["title"])
-        except TelegramError as e:
-            logger.error(f"Failed to send video for {data}: {e}")
-            await context.bot.send_message(chat_id=chat_id, text=f"خطا در ارسال ویدیو:\n{e}")
-        await context.bot.send_message(chat_id=chat_id, text=MAIN_MENU_TEXT, reply_markup=main_menu_markup())
-
+        return
 
 async def error_handler(update: object, context: ContextTypes.DEFAULT_TYPE) -> None:
     logger.error("Exception while handling update:", exc_info=context.error)
-
 
 if __name__ == "__main__":
     app = ApplicationBuilder().token(TOKEN).build()
