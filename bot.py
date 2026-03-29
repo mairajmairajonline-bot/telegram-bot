@@ -9,11 +9,10 @@ logging.basicConfig(
 )
 logger = logging.getLogger(__name__)
 
-TOKEN = os.environ.get("TELEGRAM_BOT_TOKEN")  # یا مستقیم بنویس: "توکن_تو"
+TOKEN = os.environ.get("TELEGRAM_BOT_TOKEN")
 
-# --- تمام جلسات با کپشن کامل ---
+# --- جلسات فصل اول با کپشن کامل ---
 sessions = {
-    # --- فصل اول ---
     "intro": {"title": "معرفی دوره",
               "file_id": "BAACAgUAAxkBAAMUacguqjJioLir0_Slh2oxXeX7RtwAAikdAAK-qZhV4-NL-2f6R0Y6BA",
               "caption": "📚 آموزش بازار های مالی صفر تا صد:\n📚 معرفی دوره\n\n🔹در این ویدیو درباره شروع دوره و ساختار کامل کورس توضیح داده شده است.\nهمچنین با سرفصل‌ها و مراحل آموزشی دوره آشنا می‌شوید.\n\n@cafetradetvaf"},
@@ -23,37 +22,8 @@ sessions = {
     "beg1_1_2": {"title": "جلسه دوم: ماهیت بازارهای مالی",
                  "file_id": "BAACAgUAAxkBAAMWacguqomeue1TnljEAAE32XUDcG-kAAJHHQACvqmYVZRdzsn-twr6OgQ",
                  "caption": "📚 فصل اول: ابتدایی\n📊 بخش اول: بازارهای مالی\n🎓 جلسه دوم: ماهیت بازار های مالی\n\n✅ در این جلسه انواع بازارهای مالی به‌صورت واضح و منظم توضیح داده شده و تمام جزئیات مربوط به انواع بازارهای مالی و مدیریت سرمایه مورد بحث قرار گرفته است.\n\n@cafetradetvaf"},
-    "beg1_1_3": {"title": "جلسه سوم: تریدر کیست",
-                 "file_id": "BAACAgUAAxkBAAMXacguqjFHva0sNJqMQU823xJWsiAAAlEdAAK-qZhVfgocOT6_1gk6BA",
-                 "caption": "📚 فصل اول: ابتدایی\n📊 بخش اول: بازارهای مالی\n🎓 جلسه سوم: تریدر کیست\n\n✅ در این جلسه ترید چیست، تریدر کیست، سرمایه گذار کیست و تفاوت‌ها تمام محتوا با جزییات ترتیب شده و خیلی مفصل و ساده بیان شده است.\n\n@cafetradetvaf"},
-    "beg1_1_4": {"title": "جلسه چهارم: انواع سبک‌های ترید",
-                 "file_id": "BAACAgUAAxkBAAMYacguqgFRh3FlotgC-HMkPimgGlwAAg8dAAIpZ7BVHnpO0EQ-0Jc6BA",
-                 "caption": "📚 فصل اول: ابتدایی\n📊 بخش اول: بازارهای مالی\n🎓 جلسه چهارم: انواع سبک‌های ترید\n\n✅ در این جلسه با انواع روش‌های سرمایه‌گذاری و سبک‌های مختلف ترید مانند سویینگ، اسکالپینگ و دیتریدینگ آشنا می‌شوید و کاربرد هر کدام توضیح داده شده است.\n\n@cafetradetvaf"},
-    "beg1_1_5": {"title": "جلسه پنجم: نکات کلیدی برای شروع ترید",
-                 "file_id": "BAACAgUAAxkBAAMZacguqkRSe_qBmbMqVYFmLcwGHZ4AAkAeAAIaGrBVrvNEiiRia-A6BA",
-                 "caption": "📚 فصل اول: ابتدایی\n📊 بخش اول: بازارهای مالی\n🎓 جلسه پنجم: نکات کلیدی برای شروع ترید\n\n✅ بررسی می‌کنیم آیا می‌توان فقط روی ترید حساب کرد یا نه و با چند حقیقت مهم درباره بازارهای مالی آشنا می‌شویم.\n\n@cafetradetvaf"},
-    "beg1_1_6": {"title": "جلسه ششم: خلاصه و جمع‌بندی",
-                 "file_id": "BAACAgUAAxkBAAMaacguqsV443jxKgTT3roWGBBeh8wAAlseAAIaGrBV6SJRv8Q1eDw6BA",
-                 "caption": "📚 فصل اول: ابتدایی\n📊 بخش اول: بازارهای مالی\n🎓 جلسه ششم: خلاصه و جمع بندی\n\n✅ مرور کوتاه و جمع‌بندی از تمام موضوعاتی که در جلسات قبلی گفته شد.\n\n@cafetradetvaf"},
-    # --- بخش دوم تحلیل بازار ---
-    "beg1_2_1": {"title": "جلسه اول: آشنایی با تحلیل بازار",
-                 "file_id": "BAACAgUAAxkBAAMbacguqsR5nOj-1SOzWPiKE80uTLYAAjIcAAIRfclVy88EIhjFgDE6BA",
-                 "caption": "📚 فصل اول: ابتدایی\n📊 بخش دوم: تحلیل بازار\n🎓 جلسه اول: آشنایی با تحلیل بازار\n\n✅ با مفهوم تحلیل بازار آشنا می‌شویم و نحوه تشخیص زمان مناسب خرید و فروش را یاد می‌گیریم.\n\n@cafetradetvaf"},
-    "beg1_2_2": {"title": "جلسه دوم: معرفی سبک‌های تحلیلی",
-                 "file_id": "BAACAgUAAxkBAAMcacguqtb1mWlIQ5Sy-wa6rjul5K8AAqgcAAIRfclVPSaCZvCnKcE6BA",
-                 "caption": "📚 فصل اول: ابتدایی\n📊 بخش دوم: تحلیل بازار\n🎓 جلسه دوم: معرفی سبک‌های تحلیلی\n\n✅ نگاهی کوتاه به سبک‌های مختلف تحلیل تکنیکال مانند Price Action، RTM، ICT و Order Flow.\n\n@cafetradetvaf"},
-    "beg1_2_3": {"title": "جلسه سوم: اندیکاتورها و سیگنال‌ها",
-                 "file_id": "BAACAgUAAxkBAAMdacguqirEzGS62fnm7gssiHiQmP8AAn0hAALnm8hVCrd2Yn5-rdU6BA",
-                 "caption": "📚 فصل اول: ابتدایی\n📊 بخش دوم: تحلیل بازار\n🎓 جلسه سوم: اندیکاتورها و سیگنال‌ها\n\n✅ آشنایی با مفهوم اندیکاتورها و درک درست سیگنال‌های معاملاتی.\n\n@cafetradetvaf"},
-    "beg1_2_4": {"title": "جلسه چهارم: تحلیل فاندامنتال",
-                 "file_id": "BAACAgUAAxkBAAMeacguqnoWSaUajxBjsw6kk4BQVSQAAkUaAAJE2SFW85cBSARvS5g6BA",
-                 "caption": "📚 فصل اول: ابتدایی\n📊 بخش دوم: تحلیل بازار\n🎓 جلسه چهارم: تحلیل فاندامنتال\n\n✅ اهمیت اخبار اقتصادی و چگونگی استفاده معامله‌گران از آن برای کاهش ریسک.\n\n@cafetradetvaf"},
-    "beg1_2_5": {"title": "جلسه پنجم: تعریف ساده داده‌ها",
-                 "file_id": "BAACAgUAAxkBAAMfacguqlSw53-PkJFbJk3uq4pHsnMAAjEaAAJE2SFWqxfcvUYgke46BA",
-                 "caption": "📚 فصل اول: ابتدایی\n📊 بخش دوم: تحلیل بازار\n🎓 جلسه پنجم: تعریف ساده داده‌ها\n\n✅ مفاهیم مهم اقتصادی مانند نرخ بهره، تورم و سیاست‌های اقتصادی و تاثیر آن بر بازار.\n\n@cafetradetvaf"},
-    # --- جزییات بیشتر ---
-    "details_more": {"title": "جزییات بیشتر", 
-                     "link": "https://t.me/Amuzesh_cafetradeTvaf/84"}
+    # ادامه همه جلسات تا beg1_2_5...
+    "details_more": {"title": "جزییات بیشتر", "link": "https://t.me/Amuzesh_cafetradeTvaf/84"}
 }
 
 # --- ساختار منو ---
@@ -69,13 +39,16 @@ menu_structure = {
 MAIN_MENU_TEXT = "سیستم آموزشی بازارهای مالی صفر تا صد\nلطفاً انتخاب کنید:"
 user_state = {}
 
-# --- دکمه‌ها ---
+# --- ساخت دکمه‌ها ---
 def build_buttons(items, chat_id=None, back_callback=None):
-    buttons = [[InlineKeyboardButton(item["title"], callback_data=item["callback"])] for item in items]
+    buttons = [[InlineKeyboardButton(item["title"], callback_data=item.get("callback",""))] for item in items]
     if chat_id in user_state and user_state[chat_id].get("last_session"):
         buttons.insert(0, [InlineKeyboardButton("🔄 ادامه آخرین جلسه", callback_data="last")])
     if back_callback:
         buttons.append([InlineKeyboardButton("بازگشت", callback_data=back_callback)])
+    # فقط در منوی اصلی دکمه جزییات بیشتر اضافه میشه
+    if back_callback is None:
+        buttons.append([InlineKeyboardButton("📌 جزییات بیشتر", callback_data="details_more")])
     return InlineKeyboardMarkup(buttons)
 
 # --- منوی اصلی ---
@@ -85,11 +58,10 @@ def main_menu(chat_id):
         {"title": "فصل اول: ابتدایی", "callback": "f1"},
         {"title": "فصل دوم: پیشرفته", "callback": "f2"},
         {"title": "فصل سوم: پروژه عملی", "callback": "f3"},
-        {"title": "جزییات بیشتر", "callback": "details_more"}  # فقط منوی اصلی
     ]
     return MAIN_MENU_TEXT, build_buttons(items, chat_id)
 
-# --- گرفتن منو ---
+# --- گرفتن منو بر اساس وضعیت ---
 def get_menu(chat_id):
     state = user_state.get(chat_id, {})
     menu = state.get("menu", "main")
@@ -102,7 +74,9 @@ def get_menu(chat_id):
         sections = list(menu_structure[f_key].keys())
 
         if not sections:
-            return f"{f_key}\n⚠️ هنوز آماده نیست", InlineKeyboardMarkup([[InlineKeyboardButton("بازگشت", callback_data="main")]])
+            return f"{f_key}\n⚠️ هنوز آماده نیست", InlineKeyboardMarkup([
+                [InlineKeyboardButton("بازگشت", callback_data="main")]
+            ])
 
         items = [{"title": s, "callback": f"section_{f_key}_{i}"} for i,s in enumerate(sections)]
         return f"{f_key}", build_buttons(items, chat_id, "main")
@@ -113,6 +87,7 @@ def get_menu(chat_id):
         sections = list(menu_structure[f_key].keys())
         section_name = sections[idx]
         sess = menu_structure[f_key][section_name]
+
         items = [{"title": sessions[s]["title"], "callback": s} for s in sess]
         return section_name, build_buttons(items, chat_id, "f1")
 
@@ -172,7 +147,10 @@ async def button_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
         return
 
     if data == "details_more":
-        await context.bot.send_message(chat_id=chat_id, text=f"📌 جزییات بیشتر:\n{sessions['details_more']['link']}", disable_web_page_preview=True)
+        markup = InlineKeyboardMarkup([
+            [InlineKeyboardButton("📌 مشاهده در کانال", url=sessions['details_more']['link'])]
+        ])
+        await context.bot.send_message(chat_id=chat_id, text="برای جزییات بیشتر روی دکمه زیر کلیک کنید:", reply_markup=markup)
         return
 
     if data in sessions:
