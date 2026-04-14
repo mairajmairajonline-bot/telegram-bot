@@ -16,7 +16,7 @@ sessions = {
     "intro": {"title": "معرفی دوره",
               "file_id": "BAACAgUAAxkBAAMUacguqjJioLir0_Slh2oxXeX7RtwAAikdAAK-qZhV4-NL-2f6R0Y6BA",
               "caption": "📚 آموزش بازارهای مالی صفر تا صد\n📚 معرفی دوره\n\n🔹در این ویدیو درباره شروع دوره و ساختار کامل کورس توضیح داده شده است.\nهمچنین با سرفصل‌ها و مراحل آموزشی دوره آشنا می‌شوید.\n\n@cafetradetvaf"},
-    "beg1_1_1": {"title": "جلسه اول: تعریف ساده بازارهای مالی",
+    "beg1_1_1": {"title": "جلسه اول: تعریف ساده بازارهای ",
                  "file_id": "BAACAgUAAxkBAAMVacguqsUgRSWfxHTBOKw25G7WGcUAAjgdAAK-qZhVBq6dWRpZJN46BA",
                  "caption": "📚 فصل اول: ابتدایی\n📊 بخش اول: بازارهای مالی\n🎓 جلسه اول: تعریف ساده بازارهای مالی\n\n✅ در این جلسه با تعریف ساده بازار، انواع بازارها، پیدایش و ضرورت بازارهای مالی و بسیاری موضوعات مهم دیگر آشنا می‌شوید.\n\n@cafetradetvaf"},
     "beg1_1_2": {"title": "جلسه دوم: ماهیت بازارهای مالی",
