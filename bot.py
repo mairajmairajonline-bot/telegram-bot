@@ -1,7 +1,8 @@
+
 import os
 import logging
 from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup
-from telegram.ext import ApplicationBuilder, CommandHandler, CallbackQueryHandler, MessageHandler, filters, ContextTypes, ConversationHandler
+from telegram.ext import ApplicationBuilder, CommandHandler, CallbackQueryHandler, ContextTypes
 
 logging.basicConfig(
     format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
@@ -147,9 +148,6 @@ menu_structure = {
 
 MAIN_MENU_TEXT = "سیستم آموزشی بازارهای مالی صفر تا صد\nلطفاً انتخاب کنید:"
 user_state = {}
-user_names = {}
-
-ASK_NAME = 1
 
 
 def build_buttons(items, chat_id=None, back_callback=None):
@@ -218,17 +216,14 @@ def get_menu(chat_id):
 
 
 async def send_menu(context, chat_id):
-    name = user_names.get(chat_id, "")
-    greeting = f"👋 خوش اومدی {name}!\n\n" if name else ""
     text, markup = get_menu(chat_id)
-    full_text = greeting + text
     old_msg_id = user_state.get(chat_id, {}).get("menu_msg_id")
     if old_msg_id:
         try:
             await context.bot.delete_message(chat_id=chat_id, message_id=old_msg_id)
         except Exception:
             pass
-    msg = await context.bot.send_message(chat_id=chat_id, text=full_text, reply_markup=markup)
+    msg = await context.bot.send_message(chat_id=chat_id, text=text, reply_markup=markup)
     if chat_id not in user_state:
         user_state[chat_id] = {}
     user_state[chat_id]["menu_msg_id"] = msg.message_id
@@ -237,40 +232,7 @@ async def send_menu(context, chat_id):
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     chat_id = update.message.chat_id
     user_state[chat_id] = {"last_session": None, "menu": "main", "menu_msg_id": None}
-
-    if chat_id in user_names:
-        name = user_names[chat_id]
-        await update.message.reply_text(
-            f"👋 سلام {name}!\nخوش برگشتی به سیستم آموزشی بازارهای مالی."
-        )
-        await send_menu(context, chat_id)
-        return ConversationHandler.END
-
-    await update.message.reply_text(
-        "🎓 سلام! به سیستم آموزشی بازارهای مالی صفر تا صد خوش اومدی!\n\n"
-        "📝 لطفاً اسمت رو بنویس تا بتونیم بهتر کمکت کنیم:\n\n"
-        "💡 دفعه‌های بعد با /شروع وارد بشو"
-    )
-    return ASK_NAME
-
-
-async def receive_name(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    chat_id = update.message.chat_id
-    name = update.message.text.strip()
-
-    if not name or len(name) > 50:
-        await update.message.reply_text("لطفاً یک اسم معتبر وارد کن:")
-        return ASK_NAME
-
-    user_names[chat_id] = name
-    if chat_id not in user_state:
-        user_state[chat_id] = {"last_session": None, "menu": "main", "menu_msg_id": None}
-
-    await update.message.reply_text(
-        f"✅ ممنون {name}! حالا می‌تونی شروع کنی به یادگیری."
-    )
     await send_menu(context, chat_id)
-    return ConversationHandler.END
 
 
 async def button_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
@@ -335,22 +297,7 @@ async def error_handler(update: object, context: ContextTypes.DEFAULT_TYPE):
 
 if __name__ == "__main__":
     app = ApplicationBuilder().token(TOKEN).build()
-
-    conv_handler = ConversationHandler(
-        entry_points=[
-            CommandHandler("start", start),
-            CommandHandler("شروع", start),
-        ],
-        states={
-            ASK_NAME: [MessageHandler(filters.TEXT & ~filters.COMMAND, receive_name)],
-        },
-        fallbacks=[
-            CommandHandler("start", start),
-            CommandHandler("شروع", start),
-        ],
-    )
-
-    app.add_handler(conv_handler)
+    app.add_handler(CommandHandler("start", start))
     app.add_handler(CallbackQueryHandler(button_handler))
     app.add_error_handler(error_handler)
     print("Bot Running...")
